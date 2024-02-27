@@ -94,6 +94,37 @@ words = ["flower", "flow", "flight"]
 print(longest_common_prefix(words))
 ```
 2. Разработка Telegram-бота
+   Промпт для создания Telegram-бота “напиши код для создания Telegram-бота на языке программирования Python с использованием библиотеки telebot, который сможет отвечать на простые вопросы привет","как дела?"”
+Сперва ставим pyTelegramBotAPI, чтобы работать с библиотекой telebot
+```sh
+pip install pyTelegramBotAPI
+```
+Дальше нужно будет создать бота в Telegram через BotFather и получить токен для вашего бота.
+```python
+import telebot
+
+# Замените 'YOUR_BOT_TOKEN' на токен вашего бота, полученный от BotFather
+TOKEN = 'YOUR_BOT_TOKEN'
+bot = telebot.TeleBot(TOKEN)
+
+@bot.message_handler(commands=['start', 'help'])
+def send_welcome(message):
+    bot.reply_to(message, "Привет! Как я могу помочь тебе?")
+
+@bot.message_handler(func=lambda message: True)
+def echo_all(message):
+    text = message.text.lower()
+    if "привет" in text:
+        bot.reply_to(message, "Привет! Рад тебя видеть.")
+    elif "как дела?" in text:
+        bot.reply_to(message, "Все хорошо, спасибо! А у тебя?")
+    else:
+        bot.reply_to(message, "Извини, я не понимаю этот вопрос.")
+
+# Запускаем бота
+bot.polling()
+```
+
  - Разработаешь более сложного Telegram-бота
  - Подключишь искусственный интеллект к программе
 3. Модификация Telegram-бота
