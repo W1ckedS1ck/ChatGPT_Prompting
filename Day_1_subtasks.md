@@ -174,3 +174,27 @@ random_number = random.randint(min_value, max_value)
 print(f"Случайное число в диапазоне от {min_value} до {max_value}: {random_number}")
 ```
 <p align="right"> <img width="505" alt="image" src="https://github.com/W1ckedS1ck/ChatGPT_Prompting/assets/61629889/807f9181-9dfb-4cd9-839f-6572812db8f5"> </p>
+
+- Разработай своего эхо-бота  
+🧠 Эхо-бот - это бот, который повторяет то, что мы ему отправляем. Если мы отправим ему сообщение, он просто вернет то же самое сообщение. Это часто используется для тестирования или демонстрации работы ботов.
+```python
+import telebot
+
+# Замените 'YOUR_TOKEN_HERE' на токен вашего бота
+TOKEN = 'YOUR_TOKEN_HERE'
+bot = telebot.TeleBot(TOKEN)
+
+# Обработчик команды '/start'
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.reply_to(message, "Привет! Я эхо-бот. Просто отправь мне сообщение, и я повторю его.")
+
+# Обработчик для текстовых сообщений
+@bot.message_handler(func=lambda message: True)
+def echo_all(message):
+    bot.reply_to(message, message.text)
+
+# Запуск бота
+bot.polling()
+```
+<p align="right"> <img width="1356" alt="image" src="https://github.com/W1ckedS1ck/ChatGPT_Prompting/assets/61629889/a8804342-83d2-45fc-831a-876b358337d7"> </p>
