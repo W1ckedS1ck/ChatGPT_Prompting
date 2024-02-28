@@ -126,7 +126,127 @@ bot.polling()
 ```
 
  - Разработаешь более сложного Telegram-бота
- - Подключишь искусственный интеллект к программе
+* Поэтапно просим AI добавлять функции
+1) /start - Начать общение с ботом /help - Получить список доступных команд
+2) /caps - Преобразовать текст в заглавные буквы
+3) /perevorot - Перевернуть отправленный текст
+4) /remove_vowels - Удалить все гласные из сообщения
+
+```python
+import telebot
+
+# Замените 'YOUR_TOKEN_HERE' на токен вашего бота
+TOKEN = 'YOUR_TOKEN_HERE'
+bot = telebot.TeleBot(TOKEN)
+
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.reply_to(message, "Добро пожаловать! Я ваш помощник. Используйте команду /help, чтобы узнать, что я могу.")
+
+@bot.message_handler(commands=['caps'])
+def caps(message):
+    text_caps = message.text[len('/caps '):].upper()
+    if not text_caps:
+        bot.reply_to(message, "Пожалуйста, отправьте текст после команды /caps.")
+    else:
+        bot.reply_to(message, text_caps)
+
+@bot.message_handler(commands=['help'])
+def send_help(message):
+    help_text = ("Список доступных команд:\n"
+                 "/start - Начать общение с ботом\n"
+                 "/help - Получить список доступных команд\n"
+                 "/caps - Преобразовать текст в заглавные буквы\n"
+                 "/perevorot - Перевернуть отправленный текст\n"
+                 "/remove_vowels - Удалить все гласные из сообщения\n")
+    bot.reply_to(message, help_text)
+
+@bot.message_handler(commands=['perevorot'])
+def reverse_text(message):
+    text_to_reverse = message.text[len('/perevorot '):]
+    if not text_to_reverse:
+        bot.reply_to(message, "Пожалуйста, отправьте текст после команды /perevorot.")
+    else:
+        reversed_text = text_to_reverse[::-1]
+        bot.reply_to(message, reversed_text)
+
+@bot.message_handler(commands=['remove_vowels'])
+def remove_vowels(message):
+    text_to_process = message.text[len('/remove_vowels '):]
+    if not text_to_process:
+        bot.reply_to(message, "Пожалуйста, отправьте текст после команды /remove_vowels.")
+    else:
+        vowels = 'aeiouAEIOUаеёиоуыэюяАЕЁИОУЫЭЮЯ' # Для поддержки и английского, и русского алфавитов
+        no_vowels_text = ''.join([letter for letter in text_to_process if letter not in vowels])
+        bot.reply_to(message, no_vowels_text)
+
+# Запуск бота
+bot.polling()
+```
+<p align="right"> <img width="680" alt="image" src="https://github.com/W1ckedS1ck/ChatGPT_Prompting/assets/61629889/03776d59-e1ab-463f-b5be-47eafc81d67f"> <p>
+
+ - Подключишь искусственный интеллект к программе  
+Сперва используем документацию https://proxyapi.ru/docs
+Промт Это часть кода на языке программирования Python для подключения к нейросети, возьми код за основу и дополни его так, чтобы с нейросетью можно было общаться через консоль и отправлять ей запросы и получать ответы
+```
+from openai import OpenAI
+client = OpenAI(
+    api_key="{PROXY_API_KEY}",
+    base_url="https://api.proxyapi.ru/openai/v1",
+)
+chat_completion = client.chat.completions.create(
+    model="gpt-3.5-turbo", messages=[{"role": "user", "content": "Hello world"}]
+)
+```
+```python
+from openai import OpenAI
+
+# Определяем ключ API и базовый URL
+api_key = "sk-"
+base_url = "https://api.proxyapi.ru/openai/v1"
+
+# Инициализируем клиента OpenAI
+client = OpenAI(api_key=api_key, base_url=base_url)
+
+# Функция для общения с нейросетью
+def chat_with_ai():
+    # История сообщений в чате
+    messages = []
+
+    print("Чтобы закончить чат, введите 'выход'")
+
+    while True:
+        # Получаем ввод пользователя
+        user_input = input("Вы: ")
+
+        # Проверяем, хочет ли пользователь выйти
+        if user_input.lower() == 'выход':
+            print("Чат завершен.")
+            break
+
+        # Добавляем ввод пользователя в историю сообщений
+        messages.append({"role": "user", "content": user_input})
+
+        try:
+            # Создаем запрос к нейросети
+            chat_completion = client.chat.completions.create(
+                model="gpt-3.5-turbo-1106", messages=messages
+            )
+
+            # Получаем и выводим ответ нейросети
+            ai_response = chat_completion.choices[0].message.content
+            print(f"AI: {ai_response}")
+
+            # Добавляем ответ нейросети в историю сообщений
+            messages.append({"role": "assistant", "content": ai_response})
+
+        except Exception as e:
+            print(f"Произошла ошибка: {e}")
+            break
+
+# Запускаем функцию для общения
+chat_with_ai()
+```
 3. Модификация Telegram-бота
  - Подключишь искусственный интеллект к Telegram-боту
  - Добавишь в Telegram-бота возможность отвечать голосовыми сообщениями
