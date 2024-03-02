@@ -315,3 +315,4 @@ def reply_to_message(message: Message):
 
 bot.polling()
 ```
+<p align="right"> <img width="680" alt="image" src="https://github.com/W1ckedS1ck/ChatGPT_Prompting/assets/61629889/69381392-ce26-422d-8ed1-41357491557a"> </p>
